@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
-//using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
 using Grasshopper;
@@ -11,15 +10,15 @@ using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
+
 using Quobject.SocketIoClientDotNet.Client;
-//using Quobject.EngineIoClientDotNet.Client;
 
 namespace MeshStreaming
 {
     public class ConnectSocketComponent : GH_Component
     {
         private int count = 0;
-        public static Socket socket;
+        public Socket socket;
         //private static bool _askingNewSolution = false;
         private string status = "";
         /// <summary>
@@ -37,8 +36,8 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Address", "A", "IP Address to send to", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Send", "S", "Send data", GH_ParamAccess.item);
+            pManager.AddTextParameter("Address", "Address", "IP Address to send to", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Connect", "Connect", "Send data", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -46,8 +45,8 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Status", "S", "Socket status", GH_ParamAccess.item);
-            pManager.AddTextParameter("Data", "D", "Received data", GH_ParamAccess.item);
+            pManager.AddTextParameter("Status", "Status", "Socket status", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Socket", "Socket", "Received data", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -102,31 +101,35 @@ namespace MeshStreaming
                             status =  "Reconnected";
                         });
 
+
                         count++;
                     }
                     catch(System.UriFormatException e)
                     {
                         status = "URI Format Exception";
                     }
-                }else
-                {
-                    if(socket != null)
-                    {
-                        socket.Emit("testdata");
-                    }
                 }
+                //else
+                //{
+                //    if(socket != null)
+                //    {
+                //        var obj = new JObject();
+                //        obj["value"] = "Sample Data";
+
+                //        socket.Emit("testdata",obj);
+                //    }
+                //}
                 
             }else
             {
                 if (socket != null){
                     socket.Disconnect();
-                    
-                    //socket = null;
                 }
                 count = 0;
             }
 
             DA.SetData(0, status);
+            DA.SetData(1, socket);
         }
 
         /// <summary>

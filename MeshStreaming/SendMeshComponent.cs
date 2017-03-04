@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 using Quobject.SocketIoClientDotNet.Client;
+using Newtonsoft.Json.Linq;
 
 namespace MeshStreaming
 {
@@ -24,9 +25,9 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Bytes", "B", "Bytes to send", GH_ParamAccess.item);
-            pManager.AddTextParameter("Address", "A", "IP Address to send to", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Send", "S", "Send data", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Bytes", "Bytes", "Bytes to send", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Socket", "Socket", "Socket Data", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Send", "Send", "Send data", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Status", "S", "Socket status", GH_ParamAccess.item);
+            pManager.AddTextParameter("Status", "Status", "Socket status", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -44,16 +45,32 @@ namespace MeshStreaming
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             byte[] bytes = new byte[0];
-            string address = "";
+            Socket socket = null;
             bool send = false;
 
             if (!DA.GetData(0, ref bytes)) return;
-            if (!DA.GetData(1, ref address)) return;
+            if (!DA.GetData(1, ref socket)) return;
             if (!DA.GetData(2, ref send)) return;
 
 
-            var socket = IO.Socket(address);
-            //socket.On
+            if (socket != null)
+            {
+                if (send)
+                {
+                    var obj = new JObject();
+                    obj["mesh"] = bytes;
+
+                    socket.Emit("testdata", obj);
+
+                    DA.SetData(0, "Data Sent");
+                }else
+                {
+                    DA.SetData(0, "Data Not Sent");
+                }
+            }else
+            {
+                DA.SetData(0, "Cocket is Null");
+            }
         }
 
         /// <summary>

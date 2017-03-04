@@ -25,7 +25,7 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Data", "D", "Data to deserialize", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Data", "Data", "Data to deserialize", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddMeshParameter("Mesh", "M", "Deserialized Mesh", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Mesh", "Mesh", "Deserialized Mesh", GH_ParamAccess.item);
         }
 
         /// <summary>
