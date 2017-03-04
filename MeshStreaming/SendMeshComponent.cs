@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using Quobject.SocketIoClientDotNet.Client;
 
 namespace MeshStreaming
 {
@@ -23,6 +24,9 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddGenericParameter("Bytes", "B", "Bytes to send", GH_ParamAccess.item);
+            pManager.AddTextParameter("Address", "A", "IP Address to send to", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Send", "S", "Send data", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -30,6 +34,7 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddTextParameter("Status", "S", "Socket status", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -38,6 +43,17 @@ namespace MeshStreaming
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            byte[] bytes = new byte[0];
+            string address = "";
+            bool send = false;
+
+            if (!DA.GetData(0, ref bytes)) return;
+            if (!DA.GetData(1, ref address)) return;
+            if (!DA.GetData(2, ref send)) return;
+
+
+            var socket = IO.Socket(address);
+            //socket.On
         }
 
         /// <summary>
