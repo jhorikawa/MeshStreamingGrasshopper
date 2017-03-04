@@ -94,12 +94,44 @@
     <Compile Include="MeshDeserializeComponent.cs" />
     <Compile Include="MeshSerializeComponent.cs" />
     <Compile Include="MeshStreamingInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SaveBytesComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendMeshComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SendMesh.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Connect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CustomMesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Deserialize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SaveBytes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Send Mesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Serialize.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
