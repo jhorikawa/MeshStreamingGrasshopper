@@ -19,7 +19,6 @@ namespace MeshStreaming
     {
         private int count = 0;
         public Socket socket;
-        //private static bool _askingNewSolution = false;
         private string status = "";
         /// <summary>
         /// Initializes a new instance of the ConnectSocketComponent class.
@@ -46,7 +45,8 @@ namespace MeshStreaming
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Status", "Status", "Socket status", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Socket", "Socket", "Received data", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Socket", "Socket", "Socket data", GH_ParamAccess.item);
+            //pManager.AddGenericParameter("Data", "Data", "Received data", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -58,8 +58,10 @@ namespace MeshStreaming
             string address = "";
             bool send = false;
 
+
             if (!DA.GetData(0, ref address)) return;
             if (!DA.GetData(1, ref send)) return;
+            
 
 
             if (send)
@@ -76,6 +78,8 @@ namespace MeshStreaming
                             
 
                             status = "Connected";
+
+                            socket.Emit("connected", "Grasshopper");
 
                             Grasshopper.Instances.DocumentEditor.Invoke((MethodInvoker)delegate
                             {
@@ -101,6 +105,18 @@ namespace MeshStreaming
                             status =  "Reconnected";
                         });
 
+                       // socket.On("unity", (data) =>
+                       //{
+                       //    DA.SetData(2, data);
+
+                       //    Grasshopper.Instances.DocumentEditor.Invoke((MethodInvoker)delegate
+                       //    {
+                       //        this.ExpireSolution(true);
+                       //    });
+                       //});
+
+                        
+
 
                         count++;
                     }
@@ -123,6 +139,7 @@ namespace MeshStreaming
             }else
             {
                 if (socket != null){
+                    socket.Emit("disconnect", "Grasshopper");
                     socket.Disconnect();
                 }
                 count = 0;

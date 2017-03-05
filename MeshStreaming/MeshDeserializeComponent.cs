@@ -50,7 +50,7 @@ namespace MeshStreaming
             var customMesh = ZeroFormatterSerializer.Deserialize<CustomMesh>(bytes);
 
 
-            DA.SetData(0, customMesh.GetMesh());
+            DA.SetData(0, Utils.GetMesh(customMesh));
         }
 
         /// <summary>

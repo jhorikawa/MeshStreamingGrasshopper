@@ -36,6 +36,7 @@ namespace MeshStreaming
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Status", "Status", "Socket status", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Length", "Length", "Sent data length", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -59,10 +60,12 @@ namespace MeshStreaming
                 {
                     var obj = new JObject();
                     obj["mesh"] = bytes;
-
-                    socket.Emit("testdata", obj);
+                    
+                    
+                    socket.Emit("gh", obj);
 
                     DA.SetData(0, "Data Sent");
+                    DA.SetData(1, bytes.Length);
                 }else
                 {
                     DA.SetData(0, "Data Not Sent");

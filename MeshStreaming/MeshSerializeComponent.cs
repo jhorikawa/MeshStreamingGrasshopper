@@ -50,7 +50,7 @@ namespace MeshStreaming
 
             if (!DA.GetData(0, ref mesh)) return;
 
-            CustomMesh customMesh = new CustomMesh(mesh);
+            CustomMesh customMesh = Utils.InitCustomMesh(mesh);
             var bytes = ZeroFormatterSerializer.Serialize(customMesh);
 
             DA.SetData(0, bytes);
