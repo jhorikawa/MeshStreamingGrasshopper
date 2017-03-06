@@ -23,9 +23,9 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Bytes", "B", "Bytes to save", GH_ParamAccess.item);
-            pManager.AddTextParameter("File Name", "F", "File name with path", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Save", "S", "Turn on to save", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Bytes", "Bytes", "Bytes to save", GH_ParamAccess.item);
+            pManager.AddTextParameter("File Name", "Filename", "File name with path", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Save", "Save", "Turn on to save", GH_ParamAccess.item);
         }
 
         /// <summary>

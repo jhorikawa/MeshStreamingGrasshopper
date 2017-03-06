@@ -25,7 +25,7 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Data", "Data", "Data to deserialize", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Bytes", "Bytes", "Bytes data to deserialize", GH_ParamAccess.item);
         }
 
         /// <summary>
