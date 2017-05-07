@@ -9,6 +9,8 @@ var server = require("http").createServer(function(req, res) {
 }).listen(8080);
 var io = require("socket.io").listen(server);
 
+console.log("server started.");
+
 // User Hash
 var userHash = {};
 
@@ -43,6 +45,12 @@ io.sockets.on("connection", function (socket) {
 
   socket.on("gh", function (data) {
     console.log(data.length);
+    var sendingData = [];
+    for (var i = 0; i < data.length; i++){
+      var meshData = data[i];
+      sendingData.push(meshData.mesh.toString("base64"));
+    }
+    io.sockets.emit("unity",{"meshes":sendingData});
     //console.log("data received: " + data.mesh.length);//data.mesh);
     //receivedData = data;
     //io.sockets.emit("unity",{"mesh":data.mesh.toString("base64")});

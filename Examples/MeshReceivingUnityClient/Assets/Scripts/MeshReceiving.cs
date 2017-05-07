@@ -39,6 +39,7 @@ using ProceduralToolkit;
 public class MeshReceiving : MonoBehaviour
 {
 	private SocketIOComponent socket;
+    public GameObject receivedMeshPrefab;
 
 	public void Start() 
 	{
@@ -46,135 +47,105 @@ public class MeshReceiving : MonoBehaviour
 		socket = go.GetComponent<SocketIOComponent>();
 
 		socket.On("unity", GetMesh);
-		// socket.On("open", TestOpen);
-		// socket.On("boop", TestBoop);
-		// socket.On("error", TestError);
-		// socket.On("close", TestClose);
-		
-		// StartCoroutine("BeepBoop");
+
 	}
 
-	// private IEnumerator BeepBoop()
-	// {
-	// 	// wait 1 seconds and continue
-	// 	yield return new WaitForSeconds(1);
-		
-	// 	socket.Emit("beep");
-		
-	// 	// wait 3 seconds and continue
-	// 	yield return new WaitForSeconds(3);
-		
-	// 	socket.Emit("beep");
-		
-	// 	// wait 2 seconds and continue
-	// 	yield return new WaitForSeconds(2);
-		
-	// 	socket.Emit("beep");
-		
-	// 	// wait ONE FRAME and continue
-	// 	yield return null;
-		
-	// 	socket.Emit("beep");
-	// 	socket.Emit("beep");
-	// }
 
-	// public void TestOpen(SocketIOEvent e)
-	// {
-	// 	Debug.Log("[SocketIO] Open received: " + e.name + " " + e.data);
-	// }
-	
-	// public void TestBoop(SocketIOEvent e)
-	// {
-	// 	Debug.Log("[SocketIO] Boop received: " + e.name + " " + e.data);
+    public void GetMesh(SocketIOEvent e)
+    {
+        
+        GameObject[] receivedMeshes = GameObject.FindGameObjectsWithTag("ReceivedMesh");
 
-	// 	if (e.data == null) { return; }
+        List<JSONObject> meshDatas = e.data.GetField("meshes").list;
+        for (int n=0; n< meshDatas.Count; n++)
+        //foreach (JSONObject meshData in e.data.GetField("meshes").list)
+        {
+            JSONObject meshData = meshDatas[n];
+            byte[] data = Convert.FromBase64String(meshData.str);
 
-	// 	Debug.Log(
-	// 		"#####################################################" +
-	// 		"THIS: " + e.data.GetField("this").str +
-	// 		"#####################################################"
-	// 	);
-	// }
-	
-	// public void TestError(SocketIOEvent e)
-	// {
-	// 	Debug.Log("[SocketIO] Error received: " + e.name + " " + e.data);
-	// }
-	
-	// public void TestClose(SocketIOEvent e)
-	// {	
-	// 	Debug.Log("[SocketIO] Close received: " + e.name + " " + e.data);
-	// }
+            var customMesh = ZeroFormatterSerializer.Deserialize<CustomMesh>(data);
 
-	public void GetMesh(SocketIOEvent e)
-	{
-		print("data received");
+            //print("verts: " + customMesh.vertices.Count);
 
-		//print(e.data.GetField("mesh"));
-		byte[] data = Convert.FromBase64String(e.data.GetField("mesh").str);
-
-		//print(data.Length);
-		
-		var customMesh = ZeroFormatterSerializer.Deserialize<CustomMesh>(data);
-
-		// print(customMesh.GetType());
-		print("verts: " + customMesh.vertices.Count);
-
-		List<Vector3> vertices = new List<Vector3> ();
-		if (vertices != null) {
-			for (int i = 0; i < customMesh.vertices.Count; i++) {
-				//CustomVector3d cv = customMesh.vertices [i];
-				vertices.Add (new Vector3 (customMesh.vertices[i][0], customMesh.vertices[i][1],customMesh.vertices[i][2]));
-			}
-		}
+            List<Vector3> vertices = new List<Vector3>();
+            if (vertices != null)
+            {
+                for (int i = 0; i < customMesh.vertices.Count; i++)
+                {
+                    vertices.Add(new Vector3(customMesh.vertices[i][0], customMesh.vertices[i][1], customMesh.vertices[i][2]));
+                }
+            }
 
 
-		List<int> triangles = new List<int> ();
-		if (customMesh.faces != null) {
-			for (int i=0; i<customMesh.faces.Count; i++) {
-				if (customMesh.faces[i][0] == 0) {
-					triangles.Add (customMesh.faces[i][1]);
-					triangles.Add (customMesh.faces[i][2]);
-					triangles.Add (customMesh.faces[i][3]);
-				}else if(customMesh.faces[i][0] == 1){
-					triangles.Add(customMesh.faces[i][1]);
-					triangles.Add(customMesh.faces[i][2]);
-					triangles.Add(customMesh.faces[i][3]);
+            List<int> triangles = new List<int>();
+            if (customMesh.faces != null)
+            {
+                for (int i = 0; i < customMesh.faces.Count; i++)
+                {
+                    if (customMesh.faces[i][0] == 0)
+                    {
+                        triangles.Add(customMesh.faces[i][1]);
+                        triangles.Add(customMesh.faces[i][2]);
+                        triangles.Add(customMesh.faces[i][3]);
+                    }
+                    else if (customMesh.faces[i][0] == 1)
+                    {
+                        triangles.Add(customMesh.faces[i][1]);
+                        triangles.Add(customMesh.faces[i][2]);
+                        triangles.Add(customMesh.faces[i][3]);
 
-					triangles.Add(customMesh.faces[i][1]);
-					triangles.Add(customMesh.faces[i][3]);
-					triangles.Add(customMesh.faces[i][4]);
-				}
-			}
-		}
+                        triangles.Add(customMesh.faces[i][1]);
+                        triangles.Add(customMesh.faces[i][3]);
+                        triangles.Add(customMesh.faces[i][4]);
+                    }
+                }
+            }
 
-		List<Vector2> uvs = new List<Vector2>();
-		if(customMesh.uvs != null){
-			for(int i=0; i<customMesh.uvs.Count; i++){
-				uvs.Add(new Vector2(customMesh.uvs[i][0], customMesh.uvs[i][1]));
-			}
-		}
+            List<Vector2> uvs = new List<Vector2>();
+            if (customMesh.uvs != null)
+            {
+                for (int i = 0; i < customMesh.uvs.Count; i++)
+                {
+                    uvs.Add(new Vector2(customMesh.uvs[i][0], customMesh.uvs[i][1]));
+                }
+            }
 
-		List<Vector3> normals = new List<Vector3>();
-		if(customMesh.normals != null){
-			for(int i=0; i<customMesh.normals.Count; i++){
-				normals.Add(new Vector3(customMesh.normals[i][0], customMesh.normals[i][1], customMesh.normals[i][2]));
-			}
-		}
+            List<Vector3> normals = new List<Vector3>();
+            if (customMesh.normals != null)
+            {
+                for (int i = 0; i < customMesh.normals.Count; i++)
+                {
+                    normals.Add(new Vector3(customMesh.normals[i][0], customMesh.normals[i][1], customMesh.normals[i][2]));
+                }
+            }
 
-		
-		MeshDraft meshDraft = new MeshDraft ();
-		meshDraft.vertices = vertices;
-		meshDraft.triangles = triangles;
-		meshDraft.uv = uvs;
-		meshDraft.normals = normals;
+            MeshDraft meshDraft = new MeshDraft();
+            meshDraft.vertices = vertices;
+            meshDraft.triangles = triangles;
+            meshDraft.uv = uvs;
+            meshDraft.normals = normals;
 
-		GetComponent<MeshFilter>().mesh = meshDraft.ToMesh();
+            if(n+1 >= receivedMeshes.Length)
+            {
+                GameObject receivedMeshInstance = (GameObject)Instantiate(receivedMeshPrefab);
+                receivedMeshInstance.GetComponent<MeshFilter>().mesh = meshDraft.ToMesh();
+                
+            }else
+            {
+                receivedMeshes[n].GetComponent<MeshFilter>().mesh = meshDraft.ToMesh();
+            }
 
-		//CustomMesh customMesh = new CustomMesh();
+        }
 
-		// print(customMesh.ToString());
-		//var d = ZeroFormatterSerializer.Serialize(customMesh);
-		//var dd = ZeroFormatterSerializer.Deserialize<CustomMesh>(d);
-	}
+        if(receivedMeshes.Length > meshDatas.Count)
+        {
+            for(int i= meshDatas.Count; i< receivedMeshes.Length; i++)
+            {
+                Destroy(receivedMeshes[i]);
+            }
+
+            Resources.UnloadUnusedAssets();
+        }
+
+    }
 }
