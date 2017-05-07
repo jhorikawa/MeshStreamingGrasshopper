@@ -42,9 +42,10 @@ io.sockets.on("connection", function (socket) {
   });
 
   socket.on("gh", function (data) {
-    console.log("data received: " + data.mesh.length);//data.mesh);
-    receivedData = data;
-    io.sockets.emit("unity",{"mesh":data.mesh.toString("base64")});
+    console.log(data.length);
+    //console.log("data received: " + data.mesh.length);//data.mesh);
+    //receivedData = data;
+    //io.sockets.emit("unity",{"mesh":data.mesh.toString("base64")});
 
   });
 

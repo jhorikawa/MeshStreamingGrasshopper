@@ -25,7 +25,7 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Bytes", "Bytes", "Bytes to send", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Bytes", "Bytes", "Bytes to send", GH_ParamAccess.list);//item);
             pManager.AddGenericParameter("Socket", "Socket", "Socket Data", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Send", "Send", "Send data", GH_ParamAccess.item);
         }
@@ -36,7 +36,7 @@ namespace MeshStreaming
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Status", "Status", "Socket status", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Length", "Length", "Sent data length", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Length", "Length", "Sent data length", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -45,14 +45,14 @@ namespace MeshStreaming
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            byte[] bytes = new byte[0];
-            //List<byte[]> bytesList = new List<byte[]>();
+            //byte[] bytes = new byte[0];
+            List<byte[]> bytesList = new List<byte[]>();
             Socket socket = null;
             bool send = false;
-            //List<int> dataLengthList = new List<int>();
+            List<int> dataLengthList = new List<int>();
 
-            if (!DA.GetData(0, ref bytes)) return;
-            //if (!DA.GetData(0, ref bytesList)) return;
+            //if (!DA.GetData(0, ref bytes)) return;
+            if (!DA.GetDataList(0, bytesList)) return;
             if (!DA.GetData(1, ref socket)) return;
             if (!DA.GetData(2, ref send)) return;
 
@@ -61,22 +61,22 @@ namespace MeshStreaming
             {
                 if (send)
                 {
-                    //var objs = new JArray();
-                    //for (int i = 0; i < bytesList.Count; i++)
-                    //{
-                    //    var obj = new JObject();
-                    //    obj["mesh"] = bytesList[i];
-                    //    objs.Add(obj);
-                    //    dataLengthList.Add(bytesList[i].Length);
-                    //}
+                    var objs = new JArray();
+                    for (int i = 0; i < bytesList.Count; i++)
+                    {
+                        var obj = new JObject();
+                        obj["mesh"] = bytesList[i];
+                        objs.Add(obj);
+                        dataLengthList.Add(bytesList[i].Length);
+                    }
 
-                    var obj = new JObject();
-                    obj["mesh"] = bytes;
+                    //var obj = new JObject();
+                    //obj["mesh"] = bytes;
 
-                    socket.Emit("gh", obj);
+                    socket.Emit("gh", objs);
 
                     DA.SetData(0, "Data Sent");
-                    DA.SetData(1, bytes.Length);
+                    DA.SetDataList(1, dataLengthList);
                 }else
                 {
                     DA.SetData(0, "Data Not Sent");
