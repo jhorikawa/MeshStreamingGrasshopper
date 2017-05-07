@@ -46,10 +46,13 @@ namespace MeshStreaming
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             byte[] bytes = new byte[0];
+            //List<byte[]> bytesList = new List<byte[]>();
             Socket socket = null;
             bool send = false;
+            //List<int> dataLengthList = new List<int>();
 
             if (!DA.GetData(0, ref bytes)) return;
+            //if (!DA.GetData(0, ref bytesList)) return;
             if (!DA.GetData(1, ref socket)) return;
             if (!DA.GetData(2, ref send)) return;
 
@@ -58,10 +61,18 @@ namespace MeshStreaming
             {
                 if (send)
                 {
+                    //var objs = new JArray();
+                    //for (int i = 0; i < bytesList.Count; i++)
+                    //{
+                    //    var obj = new JObject();
+                    //    obj["mesh"] = bytesList[i];
+                    //    objs.Add(obj);
+                    //    dataLengthList.Add(bytesList[i].Length);
+                    //}
+
                     var obj = new JObject();
                     obj["mesh"] = bytes;
-                    
-                    
+
                     socket.Emit("gh", obj);
 
                     DA.SetData(0, "Data Sent");
