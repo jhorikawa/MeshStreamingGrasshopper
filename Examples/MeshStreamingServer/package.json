@@ -1,0 +1,26 @@
+{
+  "name": "meshstreamingserver",
+  "version": "0.0.1",
+  "description": "A server to receive and send grasshopper mesh binary data.",
+  "main": "app.js",
+  "dependencies": {
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhorikawa/MeshStreamingServer.git"
+  },
+  "keywords": [
+    "Node.JS"
+  ],
+  "author": "Junichiro Horikawa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jhorikawa/MeshStreamingServer/issues"
+  },
+  "homepage": "https://github.com/jhorikawa/MeshStreamingServer#readme"
+}

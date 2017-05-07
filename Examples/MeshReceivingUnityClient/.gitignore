@@ -1,0 +1,37 @@
+# ---------------[ Unity generated ]------------------ #
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+UnityGenerated/
+#ProjectSettings/*.asset#
+  
+# ----[ Visual Studio / MonoDevelop generated ]------- #
+  
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+  
+# -------------[ OS generated ]------------------------ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+#Icon?
+#Icon?.meta
+ehthumbs.db
+Thumbs.db
+ 
+# -------------[ Build ]------------------------ #
+*.apk
+*.unity3d
+iOSApp/
+Builds/
+SnapShots/
