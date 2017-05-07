@@ -1,6 +1,6 @@
 var receivedData
 
-// 1.モジュールオブジェクトの初期化
+// 1.Initialize Module
 var fs = require("fs");
 var server = require("http").createServer(function(req, res) {
      res.writeHead(200, {"Content-Type":"text/html"});
@@ -9,13 +9,13 @@ var server = require("http").createServer(function(req, res) {
 }).listen(8080);
 var io = require("socket.io").listen(server);
 
-// ユーザ管理ハッシュ
+// User Hash
 var userHash = {};
 
-// 2.イベントの定義
+// 2.Event Definition
 io.sockets.on("connection", function (socket) {
 
-  // 接続開始カスタムイベント(接続元ユーザを保存し、他ユーザへ通知)
+  // On Connected Custom Event (Save connected user and notify others)
   socket.on("connected", function (name) {
     var msg = name + " is connected.";
     userHash[socket.id] = name;
@@ -23,13 +23,13 @@ io.sockets.on("connection", function (socket) {
     console.log(msg);
   });
 
-  // メッセージ送信カスタムイベント
+  // Custom Event to Send Message
   socket.on("publish", function (data) {
     console.log("published");
     io.sockets.emit("publish", {value:data.value});
   });
 
-  // 接続終了組み込みイベント(接続元ユーザを削除し、他ユーザへ通知)
+  // On Disconnected Event(Delete connected user and notify others)
   socket.on("disconnect", function () {
     if (userHash[socket.id]) {
       var msg = userHash[socket.id] + " is disconnected.";
