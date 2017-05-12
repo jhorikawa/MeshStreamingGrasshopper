@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using ZeroFormatter;
 
@@ -46,9 +48,10 @@ namespace MeshStreaming
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Mesh mesh = new Mesh();
+            Mesh mesh = null;
 
             if (!DA.GetData(0, ref mesh)) return;
+            
 
             mesh.Normals.ComputeNormals();
             CustomMesh customMesh = Utils.InitCustomMesh(mesh);
