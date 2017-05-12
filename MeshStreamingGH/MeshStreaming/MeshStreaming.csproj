@@ -103,6 +103,7 @@
     <Compile Include="SaveBytesComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendMeshComponent.cs" />
+    <Compile Include="SplitMeshComponent.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
