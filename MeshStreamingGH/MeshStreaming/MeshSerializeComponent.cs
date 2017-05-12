@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using ZeroFormatter;
 
@@ -38,7 +39,6 @@ namespace MeshStreaming
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("Bytes", "Bytes", "Serialized data", GH_ParamAccess.item);
-            pManager.AddGenericParameter("SplittedBytes", "SplittedBytes", "Splitted serialized data", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -48,38 +48,16 @@ namespace MeshStreaming
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Mesh mesh = new Mesh();
+            Mesh mesh = null;
 
             if (!DA.GetData(0, ref mesh)) return;
+            
 
             mesh.Normals.ComputeNormals();
             CustomMesh customMesh = Utils.InitCustomMesh(mesh);
             var bytes = ZeroFormatterSerializer.Serialize(customMesh);
 
             DA.SetData(0, bytes);
-
-
-            Mesh newMesh = new Mesh();
-            newMesh.CopyFrom(mesh);
-            int vertCount = 65000;
-            int index = 0;
-            int newMeshFacesCount = newMesh.Faces.ToIntArray(false).ToList<int>().Count;
-            while (index < newMeshFacesCount)
-            {
-
-                int startIndex = index < newMeshFacesCount ? index : newMeshFacesCount;
-                int[] deleteIndexes1 = newMesh.Faces.ToIntArray(false).ToList<int>().Take<int>(startIndex).ToArray<int>();
-                int[] deleteIndexes2 = newMesh.Faces.ToIntArray(false).ToList<int>().GetRange(startIndex + vertCount, newMeshFacesCount - (startIndex + vertCount)).ToArray<int>();
-                newMesh.Faces.DeleteFaces(deleteIndexes2);
-                newMesh.Faces.DeleteFaces(deleteIndexes1);
-                //newMesh.Faces = newMesh.Faces.Take<MeshFace>(vertCount);
-
-                newMesh.Compact();
-
-                index += vertCount;
-            }
-
-            DA.SetData(1, newMesh);
         }
 
         /// <summary>
