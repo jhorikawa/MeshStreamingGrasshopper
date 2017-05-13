@@ -26,9 +26,10 @@ io.sockets.on("connection", function (socket) {
   });
 
   // Custom Event to Send Message
-  socket.on("publish", function (data) {
-    console.log("published");
+  socket.on("publishing", function (data) {
+    console.log("published: " + data.value);
     io.sockets.emit("publish", {value:data.value});
+    io.sockets.emit("test", [{mesh:"ABC"},{mesh:"123"}]);
   });
 
   // On Disconnected Event(Delete connected user and notify others)
@@ -56,5 +57,15 @@ io.sockets.on("connection", function (socket) {
     //io.sockets.emit("unity",{"mesh":data.mesh.toString("base64")});
 
   });
+
+  socket.on("test", function(data){
+    var objs = [];
+    for (var i = 0; i < data.length; i++){
+      var meshData = data[i];
+      var obj = {"mesh":meshData.mesh.toString("base64")};
+      objs.push(obj);
+    }
+    io.sockets.emit("test", objs);
+  })
 
 });

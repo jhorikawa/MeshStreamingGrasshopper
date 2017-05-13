@@ -27,6 +27,7 @@ namespace MeshStreaming
         {
             pManager.AddGenericParameter("Bytes", "Bytes", "Bytes to send", GH_ParamAccess.list);//item);
             pManager.AddGenericParameter("Socket", "Socket", "Socket Data", GH_ParamAccess.item);
+            pManager.AddTextParameter("Target Event", "Event", "Target event name", GH_ParamAccess.item, "gh");
             pManager.AddBooleanParameter("Send", "Send", "Send data", GH_ParamAccess.item);
         }
 
@@ -50,11 +51,13 @@ namespace MeshStreaming
             Socket socket = null;
             bool send = false;
             List<int> dataLengthList = new List<int>();
+            string targetEvent = "";
 
             //if (!DA.GetData(0, ref bytes)) return;
             if (!DA.GetDataList(0, bytesList)) return;
             if (!DA.GetData(1, ref socket)) return;
-            if (!DA.GetData(2, ref send)) return;
+            if (!DA.GetData(2, ref targetEvent)) return;
+            if (!DA.GetData(3, ref send)) return;
 
 
             if (socket != null)
@@ -70,10 +73,7 @@ namespace MeshStreaming
                         dataLengthList.Add(bytesList[i].Length);
                     }
 
-                    //var obj = new JObject();
-                    //obj["mesh"] = bytes;
-
-                    socket.Emit("gh", objs);
+                    socket.Emit(targetEvent, objs);
 
                     DA.SetData(0, "Data Sent");
                     DA.SetDataList(1, dataLengthList);

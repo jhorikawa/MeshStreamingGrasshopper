@@ -35,8 +35,8 @@ namespace MeshStreaming
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Address", "Address", "IP Address to send to", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Connect", "Connect", "Send data", GH_ParamAccess.item);
+            pManager.AddTextParameter("Address", "Address", "IP Address to send to", GH_ParamAccess.item, "http://127.0.0.1:8080");
+            pManager.AddBooleanParameter("Connect", "Connect", "Send data", GH_ParamAccess.item, false);
         }
 
         /// <summary>
