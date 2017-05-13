@@ -59,7 +59,13 @@ io.sockets.on("connection", function (socket) {
   });
 
   socket.on("test", function(data){
-    console.log(data.value);
+    var objs = [];
+    for (var i = 0; i < data.length; i++){
+      var meshData = data[i];
+      var obj = {"mesh":meshData.mesh.toString("base64")};
+      objs.push(obj);
+    }
+    io.sockets.emit("test", objs);
   })
 
 });
