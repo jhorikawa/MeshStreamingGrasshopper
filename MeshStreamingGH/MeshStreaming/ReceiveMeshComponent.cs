@@ -59,8 +59,6 @@ namespace MeshStreaming
             if (!DA.GetData(1, ref eventName)) return;
             if (!DA.GetData(2, ref receive)) return;
 
-            DA.SetData(2, socket);
-
             if (receive && socket != null)
             {
                 try
@@ -76,13 +74,16 @@ namespace MeshStreaming
                             receivedDatas.Clear();
 
                             JArray jarray = (JArray)data;
-
-                            for (int i = 0; i < jarray.Count; i++)
+                            if (jarray != null)
                             {
-                                JObject jobject = (JObject)jarray[i];
-                                var d = jobject["mesh"];
+                                for (int i = 0; i < jarray.Count; i++)
+                                {
+                                    JObject jobject = (JObject)jarray[i];
+                                    string d = (string)jobject["mesh"];
+                                    byte[] bytes = Convert.FromBase64String(d);
 
-                                receivedDatas.Add(d);
+                                    receivedDatas.Add(bytes);
+                                }
                             }
 
                             Grasshopper.Instances.DocumentEditor.Invoke((MethodInvoker)delegate
