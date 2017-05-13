@@ -70,8 +70,6 @@ namespace MeshStreaming
                         dataLengthList.Add(bytesList[i].Length);
                     }
 
-                    //var obj = new JObject();
-                    //obj["mesh"] = bytes;
 
                     socket.Emit("gh", objs);
 
