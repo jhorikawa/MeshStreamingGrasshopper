@@ -7,6 +7,10 @@ Plugin for Grasshopper to stream mesh geometry through web socket with example t
 
 2. Make sure you have [Microsoft .NET Framework 4.5](https://www.microsoft.com/en-US/download/details.aspx?id=30653) installed.
 
+## Notes
+
+- Be careful not to have duplicate dlls (like Newtonsoft.Json) in the Grasshopper's libraries folder.
+
 ## Usage (for examples)
 
 1. Run Node server (README available under Examples/MeshStreamingServer).
